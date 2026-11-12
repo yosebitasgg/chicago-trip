@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chicago · 12–15 nov</title>
+<meta name="description" content="Nuestro itinerario de Chicago, día por día, para ir tachando.">
+<meta name="theme-color" content="#14213D">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon fill='%23D9232E' points='50,5 61,31 89,28 72,50 89,72 61,69 50,95 39,69 11,72 28,50 11,28 39,31'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#B3DDF2;      /* azul de la bandera de Chicago */
+  --star:#D9232E;     /* rojo de las estrellas */
+  --ink:#14213D;
+  --paper:#F7FAFC;
+  --card:#FFFFFF;
+  --muted:#5B6478;
+  --line-soft:#DCE4EC;
+  --done:#9AA3B2;
+  --day:#00A1DE;
+  --radius-lg:18px;
+  --radius-sm:8px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --sky:#2C5A73;
+    --ink:#E9EEF5;
+    --paper:#0E1626;
+    --card:#16213A;
+    --muted:#A3AEC2;
+    --line-soft:#26324D;
+    --done:#6B7590;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Archivo",system-ui,sans-serif;font-variation-settings:"wdth" 100;
+  font-size:16px;line-height:1.5;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--star);outline-offset:2px;border-radius:6px}
+
+/* ---------- Bandera / hero ---------- */
+.flag{background:var(--paper);padding:20px 16px 18px}
+.flag-inner{max-width:760px;margin:0 auto}
+.stripe{height:14px;background:var(--sky);border-radius:3px}
+.stars{display:flex;justify-content:space-between;gap:8px;padding:16px 4px}
+.star-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:pointer}
+.star-day svg{width:min(64px,17vw);height:auto;display:block;transition:transform .25s ease}
+.star-day .fill{fill:transparent;stroke:var(--star);stroke-width:5;transition:fill .4s ease}
+.star-day .clip-fill{fill:var(--star)}
+.star-day.complete svg{transform:rotate(30deg)}
+.star-day span{font-size:13px;font-weight:600;color:var(--muted)}
+.star-day[aria-current="true"] span{color:var(--ink)}
+h1{
+  font-weight:800;font-variation-settings:"wdth" 125;
+  font-size:clamp(40px,11vw,76px);line-height:.95;letter-spacing:-.02em;
+  margin:18px 0 6px;
+}
+.sub{color:var(--muted);margin:0;font-size:15px}
+.sub b{color:var(--ink);font-weight:600}
+
+/* ---------- Tabs ---------- */
+nav.tabs{
+  position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 92%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line-soft);
+}
+.tabs-inner{max-width:760px;margin:0 auto;display:flex;gap:8px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+.tabs-inner::-webkit-scrollbar{display:none}
+.tab{
+  flex:none;border:2px solid var(--c);background:transparent;border-radius:999px;
+  padding:6px 14px;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap;
+}
+.tab[aria-selected="true"]{background:var(--c);color:#fff}
+
+main{max-width:760px;margin:0 auto;padding:18px 16px 60px}
+
+/* ---------- Encabezado del día ---------- */
+.day-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.day-head h2{
+  margin:0;font-size:clamp(28px,7vw,40px);line-height:1;font-weight:800;font-variation-settings:"wdth" 112;
+}
+.wx{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line-soft)}
+.day-note{color:var(--muted);margin:6px 0 14px;font-size:15px;max-width:62ch}
+.progress{height:8px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin:0 0 22px}
+.progress i{display:block;height:100%;width:0;background:var(--day);border-radius:99px;transition:width .4s ease}
+.progress-label{font-size:13px;color:var(--muted);margin:-16px 0 20px}
+
+/* ---------- Línea del L (timeline) ---------- */
+.line{list-style:none;margin:0;padding:0;position:relative}
+.line::before{
+  content:"";position:absolute;left:21px;top:8px;bottom:8px;width:8px;border-radius:4px;background:var(--day);
+}
+.stop{position:relative;padding-left:62px;margin-bottom:14px}
+.station{
+  position:absolute;left:8px;top:14px;width:34px;height:34px;border-radius:50%;
+  background:var(--card);border:6px solid var(--ink);cursor:pointer;padding:0;
+  display:grid;place-items:center;transition:background .2s ease,border-color .2s ease;
+}
+.station svg{width:16px;height:16px;opacity:0;transition:opacity .2s}
+.stop.done .station{background:var(--day);border-color:var(--day)}
+.stop.done .station svg{opacity:1}
+.stop.next .station{box-shadow:0 0 0 5px color-mix(in srgb,var(--day) 30%,transparent)}
+.card{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:14px 16px;overflow:hidden}
+.photo{display:block;width:calc(100% + 32px);margin:-14px -16px 12px;aspect-ratio:16/9;object-fit:cover;background:var(--line-soft)}
+.check .thumb{width:72px;height:72px;border-radius:12px;object-fit:cover;flex:none;background:var(--line-soft);margin-left:auto}
+.check > div{flex:1;min-width:0}
+.stop.done .card{opacity:.62}
+.stop.done .title{text-decoration:line-through;text-decoration-thickness:2px;color:var(--done)}
+.time{font-weight:800;font-variation-settings:"wdth" 80;font-size:15px;color:var(--muted);letter-spacing:.01em}
+.title{font-weight:700;font-size:18px;line-height:1.25;margin:2px 0 6px}
+.desc{margin:0;color:var(--ink);font-size:15px}
+.desc p{margin:0 0 6px}
+.tip{
+  margin-top:10px;padding:8px 12px;border-radius:var(--radius-sm);font-size:14px;
+  background:color-mix(in srgb,var(--sky) 45%,transparent);
+}
+.transit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;font-size:14px;color:var(--muted)}
+.chip{
+  display:inline-flex;align-items:center;gap:5px;color:#fff;font-weight:700;font-size:12.5px;
+  padding:3px 9px;border-radius:999px;background:var(--cc,#555);white-space:nowrap;
+}
+.chip.walk{background:transparent;color:var(--ink);border:1.5px solid var(--line-soft)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;font-size:14px;
+  padding:8px 14px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;cursor:pointer;
+}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn svg{width:16px;height:16px}
+
+/* ---------- Listas (extras / reservas) ---------- */
+.group-title{font-size:20px;font-weight:800;font-variation-settings:"wdth" 110;margin:26px 0 10px}
+.group-title:first-of-type{margin-top:6px}
+.check-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.check{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line-soft);border-radius:14px;padding:12px 14px}
+.check .station{position:static;flex:none;width:28px;height:28px;border-width:5px;margin-top:2px}
+.check.done .station{background:var(--day);border-color:var(--day)}
+.check.done .station svg{opacity:1}
+.check.done .title{text-decoration:line-through;color:var(--done)}
+.check .title{font-size:16px;margin:0 0 2px}
+.check .desc{font-size:14px;color:var(--muted)}
+.check .actions{margin-top:8px}
+.check .btn{padding:5px 11px;font-size:13px}
+
+/* ---------- Pie ---------- */
+.foot{border-top:1px solid var(--line-soft);margin-top:36px;padding-top:18px;color:var(--muted);font-size:14px}
+.foot .actions{margin-bottom:12px}
+.toast{
+  position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,40px);
+  background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px;
+  opacity:0;pointer-events:none;transition:all .25s ease;z-index:20;max-width:calc(100% - 32px);text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (min-width:700px){.stop{padding-left:72px}.line::before{left:25px}.station{left:12px}}
+</style>
+</head>
+<body>
+
+<header class="flag">
+  <div class="flag-inner">
+    <div class="stripe"></div>
+    <div class="stars" id="stars"></div>
+    <div class="stripe"></div>
+    <h1>Chicago</h1>
+    <p class="sub"><b>Jue 12 – Dom 15 de noviembre.</b> Hotel Millennium Knickerbocker, 163 E Walton Pl. Cada estrella es un día: se llena conforme tachamos.</p>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Días">
+  <div class="tabs-inner" id="tabs" role="tablist"></div>
+</nav>
+
+<main id="main"></main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ======================= Datos ======================= */
+const HOTEL = "Millennium Knickerbocker Hotel, 163 E Walton Pl, Chicago";
+const L = { // colores oficiales CTA
+  azul:["Línea Azul","#00A1DE"], roja:["Línea Roja","#C60C30"], cafe:["Línea Café","#62361B"],
+  metra:["Metra Electric","#005DAA"], bus:["Bus CTA","#4B5563"], pace:["Pace 811 gratis","#6D28D9"],
+  uber:["Uber/taxi","#111827"], tren:["Tren del aeropuerto","#0F766E"]
+};
+
+const DAYS = [
+ {id:"jue", tab:"Jue 12", name:"Jueves 12", color:"#00A1DE", wx:"🌧️ 45°F · lluvia y viento",
+  note:"Día de llegada y compras bajo techo. Afuera llueve con ráfagas fuertes: chamarra y paraguas a la mano.",
+  stops:[
+   {id:"j1", t:"11:00 – 12:00", title:"Aterrizamos en O'Hare: migración, maletas y aduana",
+    place:"O'Hare International Airport Terminal 5, Chicago",
+    desc:"Contamos 30 a 60 min para migración más maletas. Con los pasaportes y la dirección del hotel listos, va más rápido.",
+    tip:"Si llegamos a la Terminal 5 (internacional), hay que tomar el tren interno del aeropuerto (ATS, gratis) a la Terminal 1, 2 o 3 para llegar a la Línea Azul."},
+   {id:"j2", t:"12:00 – 12:45", title:"O'Hare → Fashion Outlets of Chicago",
+    desc:"Línea Azul dirección Forest Park, solo 1 parada hasta Rosemont (5 min). Ahí el bus Pace 811 (gratis) o 12 min caminando al outlet.",
+    transit:[["tren","ATS a T1-3"],["azul","O'Hare → Rosemont"],["pace",""],["walk","12 min"]],
+    tip:"Pagamos el metro con la tarjeta o Apple Pay en el torniquete. Saliendo de O'Hare cuesta $5 por persona.",
+    place:"Fashion Outlets of Chicago, 5220 Fashion Outlets Way, Rosemont, IL"},
+   {id:"j3", t:"12:45 – 14:45", title:"Shopping en el outlet",
+    desc:"<p>Primero las maletas al <b>Concierge Desk</b> (Nivel 1, junto a Saks OFF 5TH): $5 por maleta con ruedas, $3 mochila.</p><p>Tiendas: <b>Nordstrom Rack</b>, <b>Victoria's Secret outlet</b>, Nike Factory y Bloomingdale's Outlet. Comemos en el food court.</p>",
+    tip:"Abre de 10 a 20 h. Teléfono del concierge: (847) 928-7520.",
+    place:"Fashion Outlets of Chicago, 5220 Fashion Outlets Way, Rosemont, IL"},
+   {id:"j4", t:"14:45 – 15:45", title:"Al hotel y check-in",
+    desc:"Recogemos maletas → Línea Azul hacia el centro hasta Clark/Lake (~40 min) → cambio a Línea Roja norte hasta Chicago → 12 min caminando.",
+    transit:[["azul","Rosemont → Clark/Lake"],["roja","→ Chicago"],["walk","12 min"]],
+    tip:"No bajarse en la estación “Chicago” de la Línea Azul: queda lejos del hotel. La buena es Chicago de la Roja.",
+    place:HOTEL},
+   {id:"j5", t:"16:15 – 17:00", title:"Victoria's Secret y Nike Chicago",
+    desc:"Caminamos por Michigan Ave hacia el sur. VS en 734 N Michigan y luego <b>Nike Chicago, 669 N Michigan</b> (el de tu link). Los dos cierran a las 19:00, por eso van primero.",
+    transit:[["walk","8 min desde el hotel"]],
+    place:"Nike Chicago, 669 N Michigan Ave, Chicago"},
+   {id:"j6", t:"17:00 – 17:45", title:"Starbucks Reserve Roastery",
+    desc:"El Starbucks más grande del mundo: 5 pisos en 646 N Michigan. De paso, palomitas <b>Garrett</b> (Chicago Mix: caramelo + queso).",
+    tip:"Cierra entre 19:00 y 20:00 según el día; mejor ir antes de las 18:30.",
+    transit:[["walk","2 min"]],
+    place:"Starbucks Reserve Roastery Chicago, 646 N Michigan Ave"},
+   {id:"j7", t:"17:45 – 19:30", title:"Uniqlo, Marshalls y Nordstrom",
+    desc:"<b>Uniqlo</b> (flagship nuevo) y <b>Marshalls</b> en el mismo edificio, 600 N Michigan. A una cuadra, <b>Nordstrom</b> en 55 E Grand.",
+    tip:"Antes de ir, confirmar en Google Maps que el Marshalls sigue abierto. Si sobran ganas: Nordstrom Rack de State St abre hasta las 21:00 (Línea Roja a Washington).",
+    transit:[["walk","3 min"]],
+    place:"Uniqlo Michigan Avenue, 600 N Michigan Ave, Chicago"},
+   {id:"j8", t:"19:45 – 21:15", title:"Cena: deep dish en Gino's East",
+    desc:"162 E Superior, a 3 cuadras. Pizza estilo Chicago clásica.",
+    tip:"La deep dish tarda ~45 min en el horno: pedirla en cuanto nos sentemos. Cierra a las 21:00 (llegar antes de las 20:00).",
+    transit:[["walk","10 min"]],
+    place:"Gino's East, 162 E Superior St, Chicago"},
+   {id:"j9", t:"21:30", title:"De regreso al hotel", desc:"Caminando, 8 min.", place:HOTEL},
+  ]},
+ {id:"vie", tab:"Vie 13", name:"Viernes 13", color:"#522398", wx:"🌧️ 42°F · lluvia",
+  note:"Día de museos: todo bajo techo porque llueve casi todo el día. Hoy activamos el pase de 3 días en la app Ventra.",
+  stops:[
+   {id:"v1", t:"7:45", title:"Desayuno en Wildberry",
+    desc:"196 E Pearson, a 4 min del hotel. Pancakes y brunch muy bien calificados.",
+    tip:"Se hace fila: llegar temprano o anotarse en la lista de espera.",
+    transit:[["walk","4 min"]], place:"Wildberry Pancakes and Cafe, 196 E Pearson St, Chicago"},
+   {id:"v2", t:"8:45 – 9:30", title:"Al Museum of Science and Industry",
+    desc:"Bus 146 o 151 por Michigan Ave a Randolph → Millennium Station → Metra Electric al sur hasta 55th-56th-57th St (~17 min) → 10 min caminando.",
+    transit:[["bus","146/151"],["metra","→ 55th-56th-57th"],["walk","10 min"]],
+    tip:"El Metra no entra en el pase CTA: boleto aparte (~$3.75) en la app Ventra. Plan B: bus 6 desde State St (40–50 min).",
+    place:"Museum of Science and Industry, 5700 S DuSable Lake Shore Dr, Chicago"},
+   {id:"v3", t:"9:30 – 13:00", title:"Griffin MSI (CityPASS)",
+    desc:"Reserva a las 9:30. El pase incluye una experiencia extra (Dome, Coal Mine o simulador) y la exhibición de Ana Frank. Comemos ahí.",
+    tip:"Horario extendido del 11 al 18 nov: 9:30–17:30.",
+    place:"Museum of Science and Industry, 5700 S DuSable Lake Shore Dr, Chicago"},
+   {id:"v4", t:"13:00 – 13:45", title:"MSI → Shedd Aquarium",
+    desc:"Metra Electric al norte hasta Museum Campus/11th St → 15 min caminando al acuario.",
+    transit:[["metra","→ Museum Campus/11th"],["walk","15 min"]],
+    place:"Shedd Aquarium, 1200 S DuSable Lake Shore Dr, Chicago"},
+   {id:"v5", t:"14:00 – 16:15", title:"Shedd Aquarium (CityPASS)",
+    desc:"Reserva a las 14:00. Incluye una función 4-D. Belugas, delfines y el arrecife caribeño.",
+    tip:"Cierra a las 17:00; la última entrada es a las 16:15.",
+    place:"Shedd Aquarium, 1200 S DuSable Lake Shore Dr, Chicago"},
+   {id:"v6", t:"16:30 – 18:00", title:"Al hotel a descansar",
+    desc:"Bus 146 al norte por Michigan Ave, nos deja cerca del hotel (~35 min).",
+    transit:[["bus","146 norte"]], place:HOTEL},
+   {id:"v7", t:"18:30 – 20:00", title:"Cena: Lou Malnati's River North",
+    desc:"439 N Wells. La deep dish favorita de los locales.",
+    tip:"Reservar en OpenTable. El de Gold Coast (State St) cerró en junio, no ir ahí.",
+    transit:[["roja","Chicago → Grand"],["walk","10 min"]],
+    place:"Lou Malnati's Pizzeria River North, 439 N Wells St, Chicago"},
+   {id:"v8", t:"20:00 – 21:30", title:"Jazz en Andy's Jazz Club",
+    desc:"11 E Hubbard, a 7 min caminando de Lou's. Sets tempranos, ideal para no regresar tarde.",
+    transit:[["walk","7 min"]], place:"Andy's Jazz Club, 11 E Hubbard St, Chicago"},
+   {id:"v9", t:"21:45", title:"De regreso al hotel",
+    desc:"Línea Roja de Grand a Chicago y 12 min caminando (o Uber, ~8 min).",
+    transit:[["roja","Grand → Chicago"]], place:HOTEL},
+  ]},
+ {id:"sab", tab:"Sáb 14", name:"Sábado 14", color:"#C60C30", wx:"☀️ 46°F · soleado",
+  note:"El día bonito: todo lo de aire libre va hoy. Atardece a las 4:32 pm y lo vemos desde el Skydeck.",
+  stops:[
+   {id:"s1", t:"8:30", title:"Desayuno: Do-Rite Donuts",
+    desc:"233 E Erie, a 10 min. Donas y café. Alternativa sentados: Beatrix (671 N St Clair).",
+    transit:[["walk","10 min"]], place:"Do-Rite Donuts & Chicken, 233 E Erie St, Chicago"},
+   {id:"s2", t:"10:00 – 11:00", title:"Shoreline Architecture River Tour (CityPASS)",
+    desc:"Paseo en barco por el río viendo los edificios. Sale del muelle de Michigan Ave (401 N Michigan, bajando la escalera junto al puente).",
+    tip:"Llegar 9:45 con el código de la reserva. En noviembre dura 60 min y depende del clima. Si no hay salidas, usar ese lugar del pase en Field Museum o Art Institute.",
+    transit:[["walk","15 min"]], place:"Shoreline Sightseeing, 401 N Michigan Ave, Chicago"},
+   {id:"s3", t:"11:30 – 12:30", title:"Italian beef en Mr. Beef",
+    desc:"666 N Orleans, el de la serie <i>The Bear</i>. Pedir \"beef, dipped, hot\".",
+    tip:"Llevar efectivo. Cierra temprano (~16:00) y no abre en domingo.",
+    transit:[["walk","20 min"]], place:"Mr. Beef, 666 N Orleans St, Chicago"},
+   {id:"s4", t:"13:00 – 15:00", title:"El Frijol, Millennium Park y Riverwalk",
+    desc:"Línea Café de Chicago a Washington/Wabash → Cloud Gate (el Frijol) para las fotos. Después Crown Fountain, Lurie Garden y la orilla del río.",
+    tip:"Si ya abrió, la pista de hielo Maggie Daley Ice Ribbon está al lado (requiere reservación).",
+    transit:[["cafe","Chicago → Washington/Wabash"],["walk","5 min"]],
+    place:"Cloud Gate, Millennium Park, Chicago"},
+   {id:"s5", t:"15:30 – 17:00", title:"Skydeck en Willis Tower (CityPASS)",
+    desc:"Reserva a las 15:30: el atardecer cae a las 16:32 desde el piso 103 y The Ledge (las cajas de vidrio).",
+    tip:"Entrada por Jackson Blvd. Llegar 15 min antes. El pase usa la fila express.",
+    transit:[["walk","20 min desde el Frijol"]], place:"Skydeck Chicago, 233 S Wacker Dr, Chicago"},
+   {id:"s6", t:"17:15 – 19:15", title:"Cena: Pequod's Pizza",
+    desc:"La deep dish con orilla de queso caramelizado. Línea Café de Quincy a Armitage (~20 min) + 15 min caminando.",
+    tip:"No reservan y el sábado hay fila: a las 16:30, desde el Skydeck, ver la espera o pedir en línea en pequodspizza.com.",
+    transit:[["cafe","Quincy → Armitage"],["walk","15 min"]],
+    place:"Pequod's Pizza, 2207 N Clybourn Ave, Chicago"},
+   {id:"s7", t:"19:30 – 20:15", title:"Pequod's → hotel",
+    desc:"Línea Café de Armitage a Chicago, luego 15 min caminando o Uber (~12 min directo).",
+    transit:[["cafe","Armitage → Chicago"],["walk","15 min"]], place:HOTEL},
+   {id:"s8", t:"20:30 – 21:30", title:"360 Chicago de noche (CityPASS)",
+    desc:"Piso 94 de 875 N Michigan, a 4 min del hotel. La ciudad iluminada y el lago.",
+    tip:"Reserva a las 20:30. El pase incluye Fast Pass; TILT no está incluido.",
+    transit:[["walk","4 min"]], place:"360 CHICAGO, 875 N Michigan Ave, Chicago"},
+   {id:"s9", t:"21:45", title:"Al hotel", desc:"Caminando, 4 min.", place:HOTEL},
+  ]},
+ {id:"dom", tab:"Dom 15", name:"Domingo 15", color:"#F9461C", wx:"☀️ 47°F · soleado",
+  note:"Mañana tranquila y al aeropuerto. Vuelo internacional a las 12:53: queremos estar en O'Hare a las 10:30.",
+  stops:[
+   {id:"d1", t:"7:30", title:"Desayuno y caminata al lago",
+    desc:"Café en Dollop o Beatrix y caminata a Oak Street Beach (5 min del hotel) para despedirnos con sol.",
+    place:"Oak Street Beach, Chicago"},
+   {id:"d2", t:"8:45", title:"Check-out", desc:"Revisar cuartos, cargadores y pasaportes.", place:HOTEL},
+   {id:"d3", t:"9:00 – 10:30", title:"Hotel → O'Hare",
+    desc:"Caminar a Chicago/State → Línea Roja sur hasta Jackson → cambio a Línea Azul (pasillo subterráneo) hasta O'Hare (~45 min) → tren ATS a la Terminal 5.",
+    transit:[["walk","15 min"],["roja","Chicago → Jackson"],["azul","Jackson → O'Hare"],["tren","a T5"]],
+    tip:"Si vamos muy cargados con bolsas: Uber a las 9:30, 30–40 min hasta la T5 en domingo.",
+    place:"O'Hare International Airport Terminal 5, Chicago"},
+   {id:"d4", t:"12:53", title:"Vuelo de regreso ✈️", desc:"Aterrizamos a las 17:16.", place:"O'Hare International Airport Terminal 5, Chicago"},
+  ]},
+];
+
+const EXTRAS = [
+ {title:"Si sobra tiempo", items:[
+  {id:"x1", title:"Lincoln Park Zoo y Conservatory", desc:"Gratis, de día. Queda junto a Pequod's: combinarlo el sábado si vamos adelantados.", place:"Lincoln Park Zoo, Chicago"},
+  {id:"x2", title:"Navy Pier y la Centennial Wheel", desc:"Rueda de la fortuna con vista al lago, ~11–21 h. 1 km caminando del hotel.", place:"Navy Pier, Chicago"},
+  {id:"x3", title:"Art Institute of Chicago", desc:"Jueves abre hasta las 20:00. Está en el CityPASS como alternativa si no sale el barco.", place:"Art Institute of Chicago, 111 S Michigan Ave"},
+  {id:"x4", title:"Riverwalk de noche", desc:"Gratis. El puente de Michigan Ave iluminado está a 15 min del hotel.", place:"Chicago Riverwalk"},
+  {id:"x5", title:"Nordstrom Rack de State St", desc:"24 N State, abre hasta las 21:00. Línea Roja a Washington.", place:"Nordstrom Rack, 24 N State St, Chicago"},
+ ]},
+ {title:"Más cosas ricas", items:[
+  {id:"f1", title:"Pat's Pizza (tavern-style)", desc:"La pizza delgada en cuadritos que comen los locales, #1 en Time Out. Línea Roja/Café a Fullerton. Solo cenas.", place:"Pat's Pizza, 2679 N Lincoln Ave, Chicago"},
+  {id:"f2", title:"Al's #1 Italian Beef", desc:"El #1 del ranking de The Infatuation (2026). 1079 W Taylor, Línea Azul a UIC-Halsted.", place:"Al's #1 Italian Beef, 1079 W Taylor St, Chicago"},
+  {id:"f3", title:"Portillo's", desc:"Hot dog estilo Chicago + Italian beef + pastel de chocolate. 100 W Ontario, abre hasta la 1 am.", place:"Portillo's, 100 W Ontario St, Chicago"},
+  {id:"f4", title:"Buona Beef", desc:"El Italian beef más cerca del hotel (613 N McClurg, 12 min).", place:"Buona, 613 N McClurg Ct, Chicago"},
+  {id:"f5", title:"Chocolate caliente en Ghirardelli", desc:"830 N Michigan, a 5 min. Perfecto para el frío.", place:"Ghirardelli Chocolate Shop, 830 N Michigan Ave, Chicago"},
+  {id:"f6", title:"Cena especial: Gibsons o Le Colonial", desc:"Gibsons (steakhouse clásico, 1028 N Rush) o Le Colonial (vietnamita, 57 E Oak). Ambos a menos de 6 min. Reservar.", place:"Gibsons Bar & Steakhouse, 1028 N Rush St, Chicago"},
+ ]},
+ {title:"Noche con música o risa", items:[
+  {id:"n1", title:"Buddy Guy's Legends", desc:"Blues en vivo. Cover $25 vie–sáb. Llegar antes de las 19:30. Línea Roja a Harrison.", place:"Buddy Guy's Legends, 700 S Wabash Ave, Chicago"},
+  {id:"n2", title:"Second City", desc:"Comedia de improvisación; reservar la función temprano. Línea Café a Sedgwick.", place:"The Second City, 1616 N Wells St, Chicago"},
+ ]},
+ {title:"Ya no alcanzamos (para saber)", items:[
+  {id:"z1", title:"Christkindlmarket abre el 20 nov", desc:"Y el festival de luces de Michigan Ave es el 21. Signature Lounge (piso 96) y Mindy's Hot Chocolate ya cerraron."},
+ ]},
+];
+
+const RESERVAS = [
+ {title:"Hacer ya", items:[
+  {id:"r1", title:"Comprar 2 CityPASS ($144 c/u)", desc:"Shedd + Skydeck + MSI + 360 + Shoreline. Se maneja en la app My CityPASS.", url:"https://www.citypass.com/chicago"},
+  {id:"r2", title:"Reservar MSI · vie 9:30", desc:"Desde la app de CityPASS.", url:"https://my.citypass.com"},
+  {id:"r3", title:"Reservar Shedd · vie 14:00", desc:"Desde la app de CityPASS.", url:"https://my.citypass.com"},
+  {id:"r4", title:"Reservar Shoreline · sáb 10:00", desc:"Confirmar que hay salidas en noviembre: (312) 222-9328.", url:"https://shorelinesightseeing.com/tours/architecture-river-tour/"},
+  {id:"r5", title:"Reservar Skydeck · sáb 15:30", desc:"Para ver el atardecer de las 16:32.", url:"https://theskydeck.com/plan-a-visit/"},
+  {id:"r6", title:"Reservar 360 Chicago · sáb 20:30", desc:"Desde la app de CityPASS.", url:"https://my.citypass.com"},
+  {id:"r7", title:"Lou Malnati's River North · vie 18:30", desc:"En OpenTable, mesa para 2.", url:"https://www.opentable.com/r/lou-malnatis-river-north-chicago"},
+ ]},
+ {title:"Antes de salir", items:[
+  {id:"r8", title:"Bajar la app Ventra", desc:"Para el pase de 3 días ($15, dura 72 h; activarlo el viernes en la mañana) y el boleto de Metra."},
+  {id:"r9", title:"Confirmar Marshalls de 600 N Michigan", desc:"Verificar en Google Maps que sigue abierto."},
+  {id:"r10", title:"Efectivo para Mr. Beef", desc:"Y para propinas: 18–20% en restaurantes."},
+  {id:"r11", title:"Preguntar al hotel si guardan maletas el domingo", desc:"Por si queremos pasear sin cargar después del check-out."},
+ ]},
+];
+
+const IMG = {
+"j1": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/O%27Hare_International_Airport_%28Iss069e037725%29_%28cropped%29.jpg/960px-O%27Hare_International_Airport_%28Iss069e037725%29_%28cropped%29.jpg",
+"j2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/O%27Hare_CTA_Blue_Line_station_2319.jpg/960px-O%27Hare_CTA_Blue_Line_station_2319.jpg",
+"j3": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/Fashion_Outlets_of_Chicago_1.jpg/960px-Fashion_Outlets_of_Chicago_1.jpg",
+"j4": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/The_Chicago_Water_Tower.jpg/960px-The_Chicago_Water_Tower.jpg",
+"j5": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/20070513_Magnificent_Mile.JPG/960px-20070513_Magnificent_Mile.JPG",
+"j7": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Nordstrom_flagship_pano_01.jpg/960px-Nordstrom_flagship_pano_01.jpg",
+"j8": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Gino%27s_East_Pizzeria%2C_Chicago%2C_Illinois_%2811004576173%29.jpg/960px-Gino%27s_East_Pizzeria%2C_Chicago%2C_Illinois_%2811004576173%29.jpg",
+"j9": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/The_Chicago_Water_Tower.jpg/960px-The_Chicago_Water_Tower.jpg",
+"v1": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Berry_Bliss_Panckaes_%2828954625606%29.jpg/960px-Berry_Bliss_Panckaes_%2828954625606%29.jpg",
+"v2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Metra_Electric_Train.jpg/960px-Metra_Electric_Train.jpg",
+"v3": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Museum_of_Science_and_Industry_%28Chicago%29.jpg/960px-Museum_of_Science_and_Industry_%28Chicago%29.jpg",
+"v4": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Shedd_Aquarium_E.jpg/960px-Shedd_Aquarium_E.jpg",
+"v5": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Caribbean_Reef_tank_at_Shedd_Aquarium%2C_2009-11-15.jpg/960px-Caribbean_Reef_tank_at_Shedd_Aquarium%2C_2009-11-15.jpg",
+"v6": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/20070513_Magnificent_Mile.JPG/960px-20070513_Magnificent_Mile.JPG",
+"v7": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Lou_Malnati_Pizza_Food_Items.png/960px-Lou_Malnati_Pizza_Food_Items.png",
+"v8": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/ChicagoJazzClubAndys.jpg/960px-ChicagoJazzClubAndys.jpg",
+"v9": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/The_Chicago_Water_Tower.jpg/960px-The_Chicago_Water_Tower.jpg",
+"s1": "https://upload.wikimedia.org/wikipedia/commons/1/18/Milky_donut.jpg",
+"s2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1c/Chicago_architecture_boat_tour_%287705661762%29.jpg/960px-Chicago_architecture_boat_tour_%287705661762%29.jpg",
+"s3": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Mr._Beef_Chicago_Illinois.jpg/960px-Mr._Beef_Chicago_Illinois.jpg",
+"s4": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/eb/Chicago_from_under_the_Cloud_Gate_%289694666470%29.jpg/960px-Chicago_from_under_the_Cloud_Gate_%289694666470%29.jpg",
+"s5": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/The_Ledge%2C_Willis_Tower_Skydeck%2C_Chicago%2C_Illinois_%2842675297114%29.jpg/960px-The_Ledge%2C_Willis_Tower_Skydeck%2C_Chicago%2C_Illinois_%2842675297114%29.jpg",
+"s6": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Chicago_deep_dish_pizza_from_pequod%27s.jpg/960px-Chicago_deep_dish_pizza_from_pequod%27s.jpg",
+"s7": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Green_Line_at_51st_Street.jpg/960px-Green_Line_at_51st_Street.jpg",
+"s8": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Chicago_in_2022_John_Hancock_Center_%2852054925135%29.jpg/960px-Chicago_in_2022_John_Hancock_Center_%2852054925135%29.jpg",
+"s9": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/The_Chicago_Water_Tower.jpg/960px-The_Chicago_Water_Tower.jpg",
+"d1": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Oak_Street_Beach.jpg/960px-Oak_Street_Beach.jpg",
+"d2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/The_Chicago_Water_Tower.jpg/960px-The_Chicago_Water_Tower.jpg",
+"d3": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/O%27Hare_CTA_Blue_Line_station_2319.jpg/960px-O%27Hare_CTA_Blue_Line_station_2319.jpg",
+"d4": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/O%27Hare_International_Airport_%28Iss069e037725%29_%28cropped%29.jpg/960px-O%27Hare_International_Airport_%28Iss069e037725%29_%28cropped%29.jpg",
+"x1": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Lincoln_Park_Zoo%2C_Chicago.jpg/960px-Lincoln_Park_Zoo%2C_Chicago.jpg",
+"x2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Navy_Pier_Ferris_wheel_%2852166153790%29.jpg/960px-Navy_Pier_Ferris_wheel_%2852166153790%29.jpg",
+"x3": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Art_Institute_of_Chicago_Lion_Statue_%282-D%29.jpg/960px-Art_Institute_of_Chicago_Lion_Statue_%282-D%29.jpg",
+"x4": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Chicago_Riverwalk_%2851556708640%29.jpg/960px-Chicago_Riverwalk_%2851556708640%29.jpg",
+"x5": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Nordstrom_flagship_pano_01.jpg/960px-Nordstrom_flagship_pano_01.jpg",
+"f1": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/eb/Chicago_thin_crust_pizza.jpg/960px-Chicago_thin_crust_pizza.jpg",
+"f2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Buona_Chicago%27s_Original_Italian_Beef.jpg/960px-Buona_Chicago%27s_Original_Italian_Beef.jpg",
+"f3": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/Chicago-style_hot_dog_2.jpg/960px-Chicago-style_hot_dog_2.jpg",
+"f4": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Buona_Chicago%27s_Original_Italian_Beef.jpg/960px-Buona_Chicago%27s_Original_Italian_Beef.jpg",
+"f5": "https://upload.wikimedia.org/wikipedia/commons/1/14/Hot_chocolate_mug_with_whipped_cream.jpg",
+"n1": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/BuddyGuy_at_Legends.jpg/960px-BuddyGuy_at_Legends.jpg",
+"n2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/The_Second_City%2C_Main_Stage.jpg/960px-The_Second_City%2C_Main_Stage.jpg",
+"z1": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Chicago_December_2023_07_%28Millennium_Park--Crown_Fountain%29.jpg/960px-Chicago_December_2023_07_%28Millennium_Park--Crown_Fountain%29.jpg"
+};
+
+/* ======================= Estado ======================= */
+const KEY = "chi-trip-v1";
+let done = new Set();
+try { done = new Set(JSON.parse(localStorage.getItem(KEY) || "[]")); } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify([...done])); } catch(e) {} }
+
+// Importar progreso compartido (#p=id,id,...)
+(function importShared(){
+  const m = location.hash.match(/p=([^&]+)/);
+  if (!m) return;
+  const ids = decodeURIComponent(m[1]).split(",").filter(Boolean);
+  ids.forEach(id => done.add(id));
+  save();
+  history.replaceState(null, "", location.pathname);
+  setTimeout(() => toast(`Importamos ${ids.length} palomitas de tu pareja`), 300);
+})();
+
+/* ======================= Utilidades ======================= */
+const $ = s => document.querySelector(s);
+const enc = encodeURIComponent;
+const dirUrl = p => `https://www.google.com/maps/dir/?api=1&destination=${enc(p)}&travelmode=transit`;
+const placeUrl = p => `https://www.google.com/maps/search/?api=1&query=${enc(p)}`;
+const ICON = {
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  nav:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+  link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/><path d="M14 10a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg>',
+};
+const STAR_PTS = "50,4 60,33 92,27 70,50 92,73 60,67 50,96 40,67 8,73 30,50 8,27 40,33";
+
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2400);
+}
+function chips(transit){
+  if (!transit) return "";
+  return `<div class="transit">${transit.map(([k,txt]) => {
+    if (k === "walk") return `<span class="chip walk">🚶 ${txt}</span>`;
+    const [name,col] = L[k];
+    return `<span class="chip" style="--cc:${col}">${name}${txt ? " · "+txt : ""}</span>`;
+  }).join("")}</div>`;
+}
+function stationBtn(id, label){
+  return `<button class="station" data-id="${id}" aria-pressed="${done.has(id)}" aria-label="Marcar: ${label.replace(/"/g,"")}">${ICON.check}</button>`;
+}
+
+/* ======================= Render ======================= */
+const TABS = [...DAYS.map(d => ({id:d.id, label:d.tab, color:d.color})),
+  {id:"extras", label:"Si sobra tiempo", color:"#009B3A"},
+  {id:"reservas", label:"Reservas", color:"#62361B"}];
+
+function chicagoNow(){
+  const p = new Intl.DateTimeFormat("en-CA",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+  return p; // YYYY-MM-DD
+}
+function defaultTab(){
+  const map = {"2026-11-12":"jue","2026-11-13":"vie","2026-11-14":"sab","2026-11-15":"dom"};
+  return map[chicagoNow()] || (chicagoNow() < "2026-11-12" ? "reservas" : "jue");
+}
+let current = (() => { try { return sessionStorage.getItem(KEY+"-tab"); } catch(e){ return null; } })() || defaultTab();
+
+function renderStars(){
+  $("#stars").innerHTML = DAYS.map(d => {
+    const ids = d.stops.map(s => s.id);
+    const n = ids.filter(id => done.has(id)).length;
+    const pct = n / ids.length;
+    const complete = pct === 1;
+    return `<button class="star-day ${complete ? "complete":""}" data-tab="${d.id}" aria-current="${current===d.id}" aria-label="${d.name}: ${n} de ${ids.length}">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <defs><clipPath id="c-${d.id}"><rect x="0" y="${100 - pct*100}" width="100" height="100"/></clipPath></defs>
+        <polygon class="clip-fill" points="${STAR_PTS}" clip-path="url(#c-${d.id})"/>
+        <polygon class="fill" points="${STAR_PTS}"/>
+      </svg>
+      <span>${d.tab}</span></button>`;
+  }).join("");
+}
+
+function renderTabs(){
+  $("#tabs").innerHTML = TABS.map(t =>
+    `<button class="tab" role="tab" style="--c:${t.color}" data-tab="${t.id}" aria-selected="${current===t.id}">${t.label}</button>`).join("");
+  const sel = $(`.tab[data-tab="${current}"]`);
+  if (sel) sel.scrollIntoView({inline:"center", block:"nearest"});
+}
+
+function renderDay(d){
+  const ids = d.stops.map(s => s.id);
+  const n = ids.filter(id => done.has(id)).length;
+  const nextId = ids.find(id => !done.has(id));
+  document.documentElement.style.setProperty("--day", d.color);
+  return `
+    <div class="day-head"><h2>${d.name}</h2><span class="wx">${d.wx}</span></div>
+    <p class="day-note">${d.note}</p>
+    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${ids.length}" aria-valuenow="${n}"><i style="width:${n/ids.length*100}%"></i></div>
+    <p class="progress-label">${n} de ${ids.length} paradas${n===ids.length ? " · ¡día completo! ⭐" : ""}</p>
+    <ol class="line">
+      ${d.stops.map(s => `
+      <li class="stop ${done.has(s.id) ? "done":""} ${s.id===nextId ? "next":""}">
+        ${stationBtn(s.id, s.title)}
+        <div class="card">
+          ${IMG[s.id] ? `<img class="photo" src="${IMG[s.id]}" alt="${s.title.replace(/"/g,"")}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}
+          <div class="time">${s.t}</div>
+          <div class="title">${s.title}</div>
+          <div class="desc">${s.desc.startsWith("<p>") ? s.desc : `<p>${s.desc}</p>`}</div>
+          ${chips(s.transit)}
+          ${s.tip ? `<div class="tip">💡 ${s.tip}</div>` : ""}
+          ${s.place ? `<div class="actions">
+            <a class="btn primary" href="${dirUrl(s.place)}" target="_blank" rel="noopener">${ICON.nav} Cómo llegar</a>
+            <a class="btn" href="${placeUrl(s.place)}" target="_blank" rel="noopener">${ICON.pin} Fotos y reseñas</a>
+          </div>` : ""}
+        </div>
+      </li>`).join("")}
+    </ol>`;
+}
+
+function renderList(groups, color){
+  document.documentElement.style.setProperty("--day", color);
+  return groups.map(g => `
+    <h3 class="group-title">${g.title}</h3>
+    <ul class="check-list">
+      ${g.items.map(it => `
+      <li class="check ${done.has(it.id) ? "done":""}">
+        ${stationBtn(it.id, it.title)}
+        <div>
+          <div class="title">${it.title}</div>
+          <div class="desc">${it.desc}</div>
+          ${(it.place || it.url) ? `<div class="actions">
+            ${it.place ? `<a class="btn" href="${dirUrl(it.place)}" target="_blank" rel="noopener">${ICON.nav} Cómo llegar</a><a class="btn" href="${placeUrl(it.place)}" target="_blank" rel="noopener">${ICON.pin} Fotos y reseñas</a>` : ""}
+            ${it.url ? `<a class="btn" href="${it.url}" target="_blank" rel="noopener">${ICON.link} Abrir</a>` : ""}
+          </div>` : ""}
+        </div>
+        ${IMG[it.id] ? `<img class="thumb" src="${IMG[it.id]}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}
+      </li>`).join("")}
+    </ul>`).join("");
+}
+
+function footer(){
+  return `<div class="foot">
+    <div class="actions">
+      <button class="btn primary" id="share">${ICON.link} Compartir mi progreso</button>
+      <button class="btn" id="reset">Borrar palomitas</button>
+    </div>
+    <p>Cada celular guarda sus palomitas. Para pasarle las tuyas a tu pareja, toca “Compartir mi progreso” y mándale el link: al abrirlo se suman a las suyas.</p>
+    <p>Metro: tarjeta o Apple Pay en el torniquete ($2.50; desde O'Hare $5). Pase de 3 días $15 en la app Ventra. Horarios revisados el 12 nov 2026; confirmar en Google Maps antes de ir.</p>
+  </div>`;
+}
+
+function render(){
+  const main = $("#main");
+  if (current === "extras") main.innerHTML = `<div class="day-head"><h2>Si sobra tiempo</h2></div><p class="day-note">Opcionales para meter donde quepan, sin prisas y de regreso antes de las 22:00.</p>` + renderList(EXTRAS, "#009B3A") + footer();
+  else if (current === "reservas") main.innerHTML = `<div class="day-head"><h2>Reservas</h2></div><p class="day-note">Las 5 atracciones del CityPASS piden horario reservado. Mejor dejarlas listas desde hoy.</p>` + renderList(RESERVAS, "#62361B") + footer();
+  else main.innerHTML = renderDay(DAYS.find(d => d.id === current)) + footer();
+  renderStars(); renderTabs();
+}
+
+/* ======================= Eventos ======================= */
+document.addEventListener("click", e => {
+  const st = e.target.closest(".station");
+  if (st){
+    const id = st.dataset.id;
+    done.has(id) ? done.delete(id) : done.add(id);
+    save(); render();
+    const again = document.querySelector(`.station[data-id="${id}"]`); if (again) again.focus({preventScroll:true});
+    return;
+  }
+  const tab = e.target.closest("[data-tab]");
+  if (tab){
+    current = tab.dataset.tab;
+    try { sessionStorage.setItem(KEY+"-tab", current); } catch(e){}
+    render(); window.scrollTo({top: document.querySelector("nav.tabs").offsetTop, behavior:"smooth"});
+    return;
+  }
+  if (e.target.closest("#share")){
+    const url = `${location.origin}${location.pathname}#p=${enc([...done].join(","))}`;
+    if (navigator.share) navigator.share({title:"Mi progreso en Chicago", url}).catch(()=>{});
+    else if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => toast("Link copiado"), () => prompt("Copia este link:", url));
+    return;
+  }
+  if (e.target.closest("#reset")){
+    if (done.size && confirm("¿Borrar todas las palomitas de este celular?")){ done.clear(); save(); render(); toast("Palomitas borradas"); }
+  }
+});
+
+render();
+</script>
+</body>
+</html>
