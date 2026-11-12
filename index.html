@@ -37,20 +37,15 @@ button{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--star);outline-offset:2px}
 .wrap{max-width:720px;margin:0 auto;padding:0 16px}
 
-header{padding:22px 0 26px}
-.stripe{height:12px;background:var(--sky)}
-.stars{display:flex;justify-content:space-between;padding:14px 2px}
-.star-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0;cursor:pointer}
-.star-day svg{width:min(60px,16vw);height:auto;display:block}
-.star-day .outline{fill:none;stroke:var(--star);stroke-width:5;stroke-linejoin:round}
-.star-day .solid{fill:var(--star)}
-.star-day span{font-size:12px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
-.star-day[aria-current="true"] span{color:var(--ink)}
-h1{
-  font-weight:800;font-variation-settings:"wdth" 125;
-  font-size:clamp(44px,12.5vw,84px);line-height:.9;letter-spacing:-.025em;margin:22px 0 10px;
-}
-.lede{margin:0;color:var(--muted);max-width:52ch}
+.hero{position:relative;height:min(78vh,620px);min-height:440px;overflow:hidden;background:#2b3a4a}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 50%}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,16,28,0) 40%,rgba(10,16,28,.72) 100%)}
+.hero-text{position:absolute;left:0;right:0;bottom:0;z-index:1;color:#fff;padding-bottom:28px}
+.hero h1{margin:0;font-family:var(--serif);font-weight:500;font-size:clamp(68px,21vw,140px);line-height:.85;letter-spacing:-.035em}
+.hero p{margin:14px 0 0;font-family:var(--serif);font-style:italic;font-size:clamp(18px,4.8vw,22px);line-height:1.35;max-width:30ch;opacity:.95}
+.tab svg{width:14px;height:14px;vertical-align:-1px;margin-right:6px}
+.tab .solid{fill:var(--star)}
+.tab .outline{fill:none;stroke:var(--star);stroke-width:7;stroke-linejoin:round}
 
 nav.tabs{position:sticky;top:0;z-index:5;background:var(--sign);color:var(--sign-text)}
 .tabs-inner{display:flex;overflow-x:auto;scrollbar-width:none}
@@ -140,8 +135,6 @@ main{padding:0 0 64px}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---- Editorial ---- */
-h1{font-family:var(--serif);font-weight:500;font-variation-settings:normal;font-size:clamp(56px,16vw,104px);letter-spacing:-.03em;line-height:.92}
-.lede{font-family:var(--serif);font-size:19px;line-height:1.45;color:#3F4654}
 nav.tabs{border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
 .tab{opacity:.55;font-weight:600}
 .tab[aria-selected="true"]{opacity:1}
@@ -167,12 +160,12 @@ nav.tabs{border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
 </head>
 <body>
 
-<header class="wrap">
-  <div class="stripe"></div>
-  <div class="stars" id="stars"></div>
-  <div class="stripe"></div>
-  <h1>Chicago</h1>
-  <p class="lede">Del jueves 12 al domingo 15 de noviembre, todo en metro. Cada estrella es un día y se llena conforme tachamos paradas.</p>
+<header class="hero">
+  <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Chicago_skyline_from_the_North_Avenue_Beach_Pier.jpg/1920px-Chicago_skyline_from_the_North_Avenue_Beach_Pier.jpg" alt="El skyline de Chicago desde North Avenue Beach" referrerpolicy="no-referrer">
+  <div class="hero-text wrap">
+    <h1>Chicago</h1>
+    <p>Del 12 al 15 de noviembre. Cuatro días, todo en metro.</p>
+  </div>
 </header>
 
 <nav class="tabs" aria-label="Secciones">
@@ -422,20 +415,16 @@ function defaultTab(){
 }
 let current = (() => { try { return sessionStorage.getItem(KEY+"-tab"); } catch(e){ return null; } })() || defaultTab();
 
-function renderStars(){
-  $("#stars").innerHTML = DAYS.map(d => {
-    const ids = d.stops.map(s => s.id), n = ids.filter(id => done.has(id)).length, pct = n/ids.length;
-    return `<button class="star-day" data-tab="${d.id}" aria-current="${current===d.id}" aria-label="${d.name}: ${n} de ${ids.length}">
-      <svg viewBox="0 0 100 100" aria-hidden="true">
-        <defs><clipPath id="c-${d.id}"><rect x="0" y="${100-pct*100}" width="100" height="100"/></clipPath></defs>
-        <polygon class="solid" points="${STAR}" clip-path="url(#c-${d.id})"/>
-        <polygon class="outline" points="${STAR}"/>
-      </svg><span>${d.tab}</span></button>`;
-  }).join("");
+function starSvg(d){
+  const ids = d.stops.map(s => s.id), pct = ids.filter(id => done.has(id)).length/ids.length;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><defs><clipPath id="c-${d.id}"><rect x="0" y="${100-pct*100}" width="100" height="100"/></clipPath></defs>
+    <polygon class="solid" points="${STAR}" clip-path="url(#c-${d.id})"/><polygon class="outline" points="${STAR}"/></svg>`;
 }
 function renderTabs(){
-  $("#tabs").innerHTML = TABS.map(t =>
-    `<button class="tab" role="tab" style="--c:${t.color}" data-tab="${t.id}" aria-selected="${current===t.id}">${t.label}</button>`).join("");
+  $("#tabs").innerHTML = TABS.map(t => {
+    const d = DAYS.find(x => x.id === t.id);
+    return `<button class="tab" role="tab" style="--c:${t.color}" data-tab="${t.id}" aria-selected="${current===t.id}">${d ? starSvg(d) : ""}${t.label}</button>`;
+  }).join("");
   const sel = $(`.tab[data-tab="${current}"]`); if (sel) sel.scrollIntoView({inline:"center", block:"nearest"});
 }
 function sign(title, meta, note, n, total){
@@ -494,7 +483,7 @@ function render(){
   else if (current === "reservas") html = renderList(RESERVAS, "#F9A825", "Reservas", "Las cinco atracciones del CityPASS piden horario reservado.");
   else html = renderDay(DAYS.find(d => d.id === current));
   $("#main").innerHTML = html + footer();
-  renderStars(); renderTabs();
+  renderTabs();
 }
 
 document.addEventListener("click", e => {
