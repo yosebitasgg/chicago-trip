@@ -251,7 +251,7 @@ const DAYS = [
     place:HOTEL},
    {id:"v7", t:"19:00", end:"20:30", title:"Cena: Lou Malnati's River North", img:"lous",
     text:"439 N Wells. La deep dish favorita de los locales.",
-    note:"Reservar en OpenTable a las 19:00. El de State St (Gold Coast) cerró en junio: no ir ahí.",
+    note:"Reservado a las 19:00. El de State St (Gold Coast) cerró en junio: no ir ahí.",
     ride:[["walk","12 min a Chicago/State"],["roja","Chicago a Grand, 1 parada"],["walk","10 min"]],
     place:"Lou Malnati's Pizzeria River North, 439 N Wells St, Chicago"},
    {id:"v8", t:"20:30", end:"21:30", title:"Jazz en Andy's", img:"andys",
@@ -349,9 +349,9 @@ const RESERVAS = [
  {title:"Hacer hoy", items:[
   {id:"r1", title:"Comprar 2 pases de 3 atracciones", text:"Shedd, Museo de Ciencia e Industria y el barco de Shoreline. Se maneja en la app de CityPASS.", url:"https://www.citypass.com/chicago"},
   {id:"r2", title:"Museo de Ciencia e Industria, viernes", text:"Listo: orden D8N-QVT-NJP6, Ana Frank 2:00 PM.", url:"https://www.griffinmsi.org/citypass-ticketing"},
-  {id:"r3", title:"Shedd, viernes 10:00", text:"Desde la app de CityPASS.", url:"https://my.citypass.com"},
-  {id:"r4", title:"Shoreline, sábado 9:30, tour en español", text:"Recorrido de arquitectura. Es la única salida en español del sábado.", url:"https://shorelinesightseeing.com/tours/architecture-river-tour/"},
-  {id:"r7", title:"Lou Malnati's River North, viernes 19:00", text:"OpenTable, mesa para 2.", url:"https://www.opentable.com/r/lou-malnatis-river-north-chicago"},
+  {id:"r3", title:"Shedd, viernes 10:00", text:"Reservado.", url:"https://my.citypass.com"},
+  {id:"r4", title:"Shoreline, sábado 9:30, tour en español", text:"Reservado. Recorrido de arquitectura en español; llegar 9:15.", url:"https://shorelinesightseeing.com/tours/architecture-river-tour/"},
+  {id:"r7", title:"Lou Malnati's River North, viernes 19:00", text:"Reservado. Mesa para 2.", url:"https://www.opentable.com/r/lou-malnatis-river-north-chicago"},
  ]},
  {title:"Antes de salir", items:[
   {id:"r8", title:"Bajar la app Ventra", text:"Pase de 3 días por $15 (activarlo el viernes en la mañana) y boleto del Metra. El jueves pagamos con tarjeta en el torniquete."},
@@ -477,7 +477,7 @@ function footer(){
 function render(){
   let html;
   if (current === "extras") html = renderList(EXTRAS, "#009B3A", "Si sobra tiempo", "Opcionales para meter donde quepan, sin prisas y en el hotel antes de las 22:00.");
-  else if (current === "reservas") html = renderList(RESERVAS, "#F9A825", "Reservas", "Las tres atracciones del pase piden horario reservado.");
+  else if (current === "reservas") html = renderList(RESERVAS, "#F9A825", "Reservas", "Las tres atracciones y Lou Malnati's ya están reservadas. Solo falta la app Ventra.");
   else html = renderDay(DAYS.find(d => d.id === current));
   $("#main").innerHTML = html + footer();
   renderTabs();
