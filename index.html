@@ -263,42 +263,42 @@ const DAYS = [
   ]},
  {id:"sab", tab:"Sáb 14", name:"Sábado 14", color:"#C60C30",
   meta:"46°F y soleado. Oscurece 4:32 pm.",
-  note:"El día bonito. Arrancamos temprano para tener el Frijol y el Starbucks casi para nosotros.",
+  note:"El día bonito. Arrancamos temprano para tener el Frijol y el Starbucks casi para nosotros, y a las 9:30 el barco en español.",
   stops:[
-   {id:"s1", t:"7:15", end:"8:15", title:"El Frijol (Cloud Gate)", img:"bean",
+   {id:"s1", t:"7:00", end:"7:50", title:"El Frijol (Cloud Gate)", img:"bean",
     text:"A esta hora casi no hay nadie y el sol de la mañana pega en el acero: fotos sin gente atrás. Crown Fountain queda a 2 min.",
     ride:[["walk","12 min a Chicago/State"],["roja","Chicago a Lake, 2 paradas"],["walk","8 min al Frijol"]],
     place:"Cloud Gate, Millennium Park, Chicago"},
-   {id:"s2", t:"8:30", end:"9:40", title:"Starbucks Reserve Roastery", img:"mag",
+   {id:"s2", t:"8:05", end:"9:10", title:"Starbucks Reserve Roastery", img:"mag",
     text:"El Starbucks más grande del mundo, 5 pisos en 646 N Michigan. Desayunamos en la panadería Princi de adentro.",
-    note:"Ir justo cuando abre; después de las 10:00 se llena. Los listados dicen que abre entre 7:00 y 8:00: confirmar en Maps.",
+    note:"Ir recién abierto, porque después de las 10:00 se llena. Los listados dicen que abre entre 7:00 y 8:00: confirmar en Maps. A las 9:10 salimos al barco.",
     ride:[["walk","8 min a Lake"],["roja","Lake a Grand, 1 parada"],["walk","4 min"]],
     place:"Starbucks Reserve Roastery Chicago, 646 N Michigan Ave"},
-   {id:"s3", t:"10:00", end:"11:00", title:"Paseo en barco · Shoreline · CityPASS", img:"boat",
-    text:"Architecture River Tour por el río. Muelle de Michigan Ave, 401 N Michigan, bajando la escalera junto al puente.",
-    note:"Llegar 9:45 con la reserva. En noviembre dura 60 min y depende del clima. Si no hay salidas, usar ese lugar del pase en el Art Institute o el Field Museum.",
+   {id:"s3", t:"9:30", end:"10:45", title:"Recorrido de arquitectura en español · Shoreline · CityPASS", img:"boat",
+    text:"El tour por el río con la historia de los edificios, narrado en español. Sale del muelle de Michigan Ave, 401 N Michigan, bajando la escalera junto al puente.",
+    note:"Reserva sábado 9:30, tour en español. Llegar 9:15 con el código. Depende del clima; si lo cancelan, cambiarlo al de arquitectura en inglés de más tarde.",
     ride:[["walk","6 min desde el Roastery"]],
     place:"Shoreline Sightseeing, 401 N Michigan Ave, Chicago"},
-   {id:"s4", t:"11:30", end:"12:30", title:"Italian beef en Al's #1", img:"beef",
+   {id:"s4", t:"11:15", end:"12:15", title:"Italian beef en Al's #1", img:"beef",
     text:"1079 W Taylor, el número 1 del ranking 2026 de The Infatuation. Pedir “beef, dipped, hot”.",
     note:"Confirmar el horario del sábado en Maps. Plan B: Portillo's (100 W Ontario), a 3 cuadras de la estación Grand.",
     ride:[["walk","8 min a Grand"],["roja","Grand a Jackson, 3 paradas"],["azul","Jackson a UIC-Halsted, 3 paradas (pasillo subterráneo)"],["walk","10 min"]],
     place:"Al's #1 Italian Beef, 1079 W Taylor St, Chicago"},
-   {id:"s5", t:"13:00", end:"14:30", title:"Skydeck · Willis Tower · CityPASS", img:"ledge",
-    text:"Reserva 13:00. Piso 103 y The Ledge, las cajas de vidrio. Con cielo despejado se ven cuatro estados.",
-    note:"Entrada por Jackson Blvd. Llegar 15 min antes; el pase usa la fila express.",
-    ride:[["azul","UIC-Halsted a Clinton, 1 parada"],["walk","8 min por Jackson"]],
-    place:"Skydeck Chicago, 233 S Wacker Dr, Chicago"},
-   {id:"s6", t:"14:30", end:"15:45", title:"Al hotel a descansar", img:"tower",
-    ride:[["walk","10 min a Jackson"],["roja","Jackson a Chicago, 4 paradas"],["walk","12 min"]],
+   {id:"s5", t:"12:15", end:"13:15", title:"Al hotel a descansar", img:"tower",
+    ride:[["walk","10 min a UIC-Halsted"],["azul","UIC-Halsted a Jackson, 3 paradas"],["roja","Jackson a Chicago, 4 paradas (pasillo subterráneo)"],["walk","12 min"]],
     place:HOTEL},
-   {id:"s7", t:"16:00", end:"17:15", title:"Atardecer en 360 Chicago · CityPASS", img:"hancock",
-    text:"Piso 94 de 875 N Michigan, a 4 min del hotel. El sol se mete a las 4:32 y se encienden las luces de la ciudad.",
-    note:"Reserva 16:00. El pase incluye Fast Pass; TILT no viene incluido.",
-    ride:[["walk","4 min"]], place:"360 CHICAGO, 875 N Michigan Ave, Chicago"},
+   {id:"s6", t:"13:30", end:"15:30", title:"Tarde libre: Lincoln Park Zoo", img:"zoo",
+    text:"Gratis y al aire libre, aprovechando el sol. Si prefieren descansar o comprar algo que faltó, esta es la ventana.",
+    ride:[["walk","12 min a Chicago/State"],["roja","Chicago a Fullerton, 4 paradas"],["walk","15 min al zoológico"]],
+    place:"Lincoln Park Zoo, Chicago"},
+   {id:"s7", t:"16:00", end:"17:15", title:"Opcional: atardecer en 360 Chicago", img:"hancock",
+    text:"Ya no viene en el pase: se paga aparte en la taquilla o en línea. Piso 94 de 875 N Michigan, a 4 min del hotel; el sol se mete a las 4:32.",
+    note:"Si no van, la vista del barco y del Frijol ya cubre el skyline. Del zoológico: Línea Roja de Fullerton a Chicago.",
+    ride:[["roja","Fullerton a Chicago, 4 paradas"],["walk","10 min"]],
+    place:"360 CHICAGO, 875 N Michigan Ave, Chicago"},
    {id:"s8", t:"17:45", end:"19:30", title:"Cena: Pequod's Pizza", img:"pequods",
     text:"La deep dish con la orilla de queso caramelizado.",
-    note:"No reservan y el sábado hay fila. Desde el 360, a las 17:00, ver la espera o pedir para comer allá en pequodspizza.com.",
+    note:"No reservan y el sábado hay fila. A las 17:00 ver la espera o pedir para comer allá en pequodspizza.com.",
     ride:[["walk","12 min a Chicago/State"],["roja","Chicago a North/Clybourn, 2 paradas"],["walk","15 min por Clybourn"]],
     place:"Pequod's Pizza, 2207 N Clybourn Ave, Chicago"},
    {id:"s9", t:"20:15", title:"Hotel", img:"cta",
@@ -323,9 +323,9 @@ const DAYS = [
 
 const EXTRAS = [
  {title:"Si sobra tiempo", items:[
-  {id:"x1", title:"Lincoln Park Zoo", img:"zoo", text:"Gratis, de día. Línea Roja a Fullerton y 15 min a pie.", place:"Lincoln Park Zoo, Chicago"},
+  {id:"x1", title:"Skydeck (Willis Tower)", img:"ledge", text:"Piso 103 y las cajas de vidrio. Ya no viene en el pase: se paga aparte. Línea Roja a Jackson y 10 min a pie.", place:"Skydeck Chicago, 233 S Wacker Dr, Chicago"},
   {id:"x2", title:"Navy Pier y la Centennial Wheel", img:"navy", text:"Rueda de la fortuna frente al lago, 11:00 a 21:00.", place:"Navy Pier, Chicago"},
-  {id:"x3", title:"Art Institute of Chicago", img:"art", text:"Jueves hasta las 20:00. Está en el CityPASS por si no sale el barco. Línea Roja a Monroe.", place:"Art Institute of Chicago, 111 S Michigan Ave"},
+  {id:"x3", title:"Art Institute of Chicago", img:"art", text:"Jueves hasta las 20:00. Plan B si cancelan el barco (revisar si entra en su pase). Línea Roja a Monroe.", place:"Art Institute of Chicago, 111 S Michigan Ave"},
   {id:"x4", title:"Riverwalk", img:"river", text:"Paseo junto al río, gratis. Línea Roja a Lake.", place:"Chicago Riverwalk"},
   {id:"x5", title:"Nordstrom Rack de State St", img:"nord", text:"24 N State, hasta las 21:00. Línea Roja a Washington.", place:"Nordstrom Rack, 24 N State St, Chicago"},
  ]},
@@ -348,12 +348,10 @@ const EXTRAS = [
 
 const RESERVAS = [
  {title:"Hacer hoy", items:[
-  {id:"r1", title:"Comprar 2 CityPASS, $144 cada uno", text:"Shedd, Skydeck, MSI, 360 y Shoreline. Se maneja en la app My CityPASS.", url:"https://www.citypass.com/chicago"},
+  {id:"r1", title:"Comprar 2 pases de 3 atracciones", text:"Shedd, Museo de Ciencia e Industria y el barco de Shoreline. Se maneja en la app de CityPASS.", url:"https://www.citypass.com/chicago"},
   {id:"r2", title:"MSI, viernes 9:30", text:"Desde la app de CityPASS.", url:"https://my.citypass.com"},
   {id:"r3", title:"Shedd, viernes 14:00", text:"Desde la app de CityPASS.", url:"https://my.citypass.com"},
-  {id:"r4", title:"Shoreline, sábado 10:00", text:"Confirmar que hay salidas en noviembre: (312) 222-9328.", url:"https://shorelinesightseeing.com/tours/architecture-river-tour/"},
-  {id:"r5", title:"Skydeck, sábado 13:00", text:"Horarios por media hora; se agotan.", url:"https://theskydeck.com/plan-a-visit/"},
-  {id:"r6", title:"360 Chicago, sábado 16:00", text:"Para el atardecer de las 4:32.", url:"https://my.citypass.com"},
+  {id:"r4", title:"Shoreline, sábado 9:30, tour en español", text:"Recorrido de arquitectura. Es la única salida en español del sábado.", url:"https://shorelinesightseeing.com/tours/architecture-river-tour/"},
   {id:"r7", title:"Lou Malnati's River North, viernes 18:30", text:"OpenTable, mesa para 2.", url:"https://www.opentable.com/r/lou-malnatis-river-north-chicago"},
  ]},
  {title:"Antes de salir", items:[
@@ -480,7 +478,7 @@ function footer(){
 function render(){
   let html;
   if (current === "extras") html = renderList(EXTRAS, "#009B3A", "Si sobra tiempo", "Opcionales para meter donde quepan, sin prisas y en el hotel antes de las 22:00.");
-  else if (current === "reservas") html = renderList(RESERVAS, "#F9A825", "Reservas", "Las cinco atracciones del CityPASS piden horario reservado.");
+  else if (current === "reservas") html = renderList(RESERVAS, "#F9A825", "Reservas", "Las tres atracciones del pase piden horario reservado.");
   else html = renderDay(DAYS.find(d => d.id === current));
   $("#main").innerHTML = html + footer();
   renderTabs();
